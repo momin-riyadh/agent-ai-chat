@@ -2,23 +2,43 @@
  *  adds vertically stacked buttons as a bot response
  * @param {Array} suggestions buttons json array
  */
+// function addSuggestion(suggestions) {
+//     setTimeout(() => {
+//         const suggLength = suggestions.length;
+//         $(
+//             ' <div class="singleCard"> <div class="suggestions"><div class="g-menu"></div></div></diV>',
+//         )
+//             .appendTo(".chats")
+//             .hide()
+//             .fadeIn(1000);
+//         // Loop through suggestions
+//         for (let i = 0; i < suggLength; i += 1) {
+//             $(
+//                 `<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`,
+//             ).appendTo(".g-menu");
+//         }
+//         scrollToBottomOfResults();
+//     }, 1000);
+// }
+
+
 function addSuggestion(suggestions) {
-    setTimeout(() => {
-        const suggLength = suggestions.length;
-        $(
-            ' <div class="singleCard"> <div class="suggestions"><div class="g-menu"></div></div></diV>',
-        )
-            .appendTo(".chats")
-            .hide()
-            .fadeIn(1000);
-        // Loop through suggestions
-        for (let i = 0; i < suggLength; i += 1) {
-            $(
-                `<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`,
-            ).appendTo(".g-menu");
-        }
-        scrollToBottomOfResults();
-    }, 1000);
+    const suggLength = suggestions.length;
+    $('<div class="singleCard"> <div class="suggestions"><div class="g-menu"></div></div></div>')
+        .appendTo(".chats")
+        // .hide()
+        // .fadeIn(1000);
+
+    // Loop through suggestions
+    // for (let i = 0; i < suggLength; i += 1) {
+    //     $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`)
+    //         .appendTo(".g-menu");
+    // }
+    for (let i = 0; i < suggLength; i += 1) {
+        $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`)
+            .appendTo($(".g-menu").last()); // Appends only to the last .g-menu div
+    }
+    scrollToBottomOfResults();
 }
 
 
@@ -31,5 +51,5 @@ $(document).on("click", ".g-menu .menuChips", function () {
     send(payload);
 
     // delete the suggestions once user click on it.
-    $(".suggestions").remove();
+    // $(".suggestions").remove();
 });

@@ -1,0 +1,153 @@
+[
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/our_services",
+                        "title": "Explore our products and solutions"
+                    },
+                    {
+                        "payload": "/demo",
+                        "title": "I would like to see a demo"
+                    },
+                    {
+                        "payload": "/solution",
+                        "title": "Help me with a solution for my business"
+                    },
+                    {
+                        "payload": "/about_us",
+                        "title": "About Us"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "34b2cae3-d132-412b-ba4d-821ada86975d",
+                "text": "Hi there, Welcome to gPlex AI! Nice to meet you. I'd love to help you out: What would you like to know? Choose one of the options below:"
+            }
+        ],
+        "client": "hi"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/banking",
+                        "title": "Banking"
+                    },
+                    {
+                        "payload": "/insurance",
+                        "title": "Insurance"
+                    },
+                    {
+                        "payload": "/contact_centre_ai",
+                        "title": "Contact centre AI"
+                    },
+                    {
+                        "payload": "/other",
+                        "title": "Other"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "34b2cae3-d132-412b-ba4d-821ada86975d",
+                "text": "We would love to help you please select an option"
+            }
+        ],
+        "client": "/solution"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/our_services",
+                        "title": "Explore our products and solutions"
+                    },
+                    {
+                        "payload": "/demo",
+                        "title": "I would like to see a demo"
+                    },
+                    {
+                        "payload": "/solution",
+                        "title": "Help me with a solution for my business"
+                    },
+                    {
+                        "payload": "/about_us",
+                        "title": "About Us"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "34b2cae3-d132-412b-ba4d-821ada86975d",
+                "text": "Hi there, Welcome to gPlex AI! Nice to meet you. I'd love to help you out: What would you like to know? Choose one of the options below:"
+            }
+        ],
+        "client": "/greet"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/voice",
+                        "title": "Voice"
+                    },
+                    {
+                        "payload": "/messaging",
+                        "title": "Messaging"
+                    },
+                    {
+                        "payload": "/contact_center",
+                        "title": "Contact Center"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "34b2cae3-d132-412b-ba4d-821ada86975d",
+                "text": "Awesome, we have a wide suite of products to help you step up your customer service and stand out! What kind of services are you looking for?"
+            }
+        ],
+        "client": "/our_services"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/ai_chatbot",
+                        "title": "AI Chatbot"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "34b2cae3-d132-412b-ba4d-821ada86975d",
+                "text": "Which services are you interested to know more about?"
+            }
+        ],
+        "client": "/messaging"
+    }
+]

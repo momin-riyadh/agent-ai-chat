@@ -1,0 +1,130 @@
+[
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/our_services",
+                        "title": "Explore our products and solutions"
+                    },
+                    {
+                        "payload": "/demo",
+                        "title": "I would like to see a demo"
+                    },
+                    {
+                        "payload": "/solution",
+                        "title": "Help me with a solution for my business"
+                    },
+                    {
+                        "payload": "/about_us",
+                        "title": "About Us"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "dbae9e7d-fabd-45b7-9111-cbf5d9451497",
+                "text": "Hi there, Welcome to gPlex AI! Nice to meet you. I'd love to help you out: What would you like to know? Choose one of the options below:"
+            }
+        ],
+        "client": "hi"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/voice",
+                        "title": "Voice"
+                    },
+                    {
+                        "payload": "/messaging",
+                        "title": "Messaging"
+                    },
+                    {
+                        "payload": "/contact_center",
+                        "title": "Contact Center"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "dbae9e7d-fabd-45b7-9111-cbf5d9451497",
+                "text": "Awesome, we have a wide suite of products to help you step up your customer service and stand out! What kind of services are you looking for?"
+            }
+        ],
+        "client": "/our_services"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/inbound",
+                        "title": "Inbound"
+                    },
+                    {
+                        "payload": "/outbound",
+                        "title": "Outbound"
+                    },
+                    {
+                        "payload": "/reporting",
+                        "title": "Reporting"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "dbae9e7d-fabd-45b7-9111-cbf5d9451497",
+                "text": "Which services are you interested to know more about?"
+            }
+        ],
+        "client": "/contact_center"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/acd",
+                        "title": "ACD"
+                    },
+                    {
+                        "payload": "/ivr",
+                        "title": "IVR"
+                    },
+                    {
+                        "payload": "/sivr",
+                        "title": "SIVR"
+                    },
+                    {
+                        "payload": "/cti",
+                        "title": "CTI"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "dbae9e7d-fabd-45b7-9111-cbf5d9451497",
+                "text": "Okay, Which service do you want?"
+            }
+        ],
+        "client": "/inbound"
+    }
+]

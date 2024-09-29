@@ -13,7 +13,7 @@ function scrollToBottomOfResults() {
  * Set user response on the chat screen
  * @param {String} message user message
  */
-function setUserResponse(message) {
+async function setUserResponse(message) {
     const user_response = `
 <div class="userAvatar">
 <div class="userAvatar-image">
@@ -28,7 +28,7 @@ function setUserResponse(message) {
     $(".usrInput").val("");
     scrollToBottomOfResults();
     showBotTyping();
-    $(".suggestions").remove();
+    // $(".suggestions").remove();
 }
 
 /**
@@ -56,215 +56,462 @@ function getBotResponse(text) {
  *
  * for more info: `https://rasa.com/docs/rasa/connectors/your-own-website#request-and-response-format`
  */
+// async function setBotResponse(response) {
+//     console.log("SetBotResponse:", response);
+//     // response - {
+//     //     "recipient_id": "05eef2ff-3492-44c0-9fbe-c9fdf212070e",
+//     //     "text": "(১) ভোটার এলাকা পরিবর্তন, (২) স্থায়ী ঠিকানা পরিবর্তন, (৩) বায়োমেট্রিক (ছবি, স্বাক্ষর, চোখের কণিনিকার প্রতিচ্ছবি, আঙ্গুলের ছাপ) পরিবর্তন এর আবেদন অনলাইন মাধ্যমে করা যায় না।"
+//     // }
+
+//     // renders bot response after 500 milliseconds
+//     setTimeout(() => {
+//         hideBotTyping();
+//         if (response.length < 1) {
+//             const fallbackMsg = "I’m unable to find the information you’re looking for. \n" +
+//                 "\n" + "<br/>" +
+//                 "Please try asking in a different way or reach out to our support team for help. Is there anything else I can assist you with?";
+
+//             const BotResponse = `
+
+//  <div class="botAvatar">
+//                                       <div class="botAvatar-image">
+//                                          <img src="./static/img/disha.svg"/>
+//                                        </div>
+//                                        <p class="botMsg">${fallbackMsg}</p>
+//                                       </div>
+//                                        <div class="clearfix"></div>`;
+
+//             $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+//             scrollToBottomOfResults();
+//         } else {
+//             // if we get response from Rasa
+//             // let converter = new showdown.Converter();
+//             for (let i = 0; i < response.length; i += 1) {
+//                 // console.log("rrrrrrrrrrrrrrr", response[i]);
+//                 if (Object.hasOwnProperty.call(response[i], "text")) {
+//                     // console.log(response[i].text);
+//                     // response[i] = response[i].text
+//                     if (response[i].text != null) {
+//                         // console.log(response[i].text.text);
+//                         // console.log("11111111111111");
+//                         // convert the text to mardown format using showdown.js(https://github.com/showdownjs/showdown);
+//                         let botResponse;
+//                         let html = converter.makeHtml(response[i].text);
+//                         html = html
+//                             .replaceAll("<p>", "")
+//                             .replaceAll("</p>", "")
+//                             .replaceAll("<strong>", "<b>")
+//                             .replaceAll("</strong>", "</b>");
+//                         html = html.replace(/(?:\r\n|\r|\n)/g, "<br>");
+//                         console.log(html);
+//                         // check for blockquotes
+//                         if (html.includes("<blockquote>")) {
+//                             html = html.replaceAll("<br>", "");
+//                             botResponse = getBotResponse(html);
+//                         }
+//                         // check for image
+//                         if (html.includes("<img")) {
+//                             html = html.replaceAll("<img", '<img class="imgcard_mrkdwn" ');
+//                             botResponse = getBotResponse(html);
+//                         }
+//                         // check for preformatted text
+//                         if (html.includes("<pre") || html.includes("<code>")) {
+//                             botResponse = getBotResponse(html);
+//                         }
+//                         // check for list text
+//                         if (
+//                             html.includes("<ul") ||
+//                             html.includes("<ol") ||
+//                             html.includes("<li") ||
+//                             html.includes("<h3")
+//                         ) {
+//                             html = html.replaceAll("<br>", "");
+//                             // botResponse = `<img class="botAvatar" src="./static/img/sara_avatar.png"/><span class="botMsg">${html}</span><div class="clearfix"></div>`;
+//                             botResponse = getBotResponse(html);
+//                         } else {
+//                             // if no markdown formatting found, render the text as it is.
+//                             if (!botResponse) {
+//                                 botResponse = `
+//                                       <div class="botAvatar">
+//                                       <div class="botAvatar-image">
+//                                          <img src="./static/img/disha.svg"/>
+//                                        </div>
+//                                        <p class="botMsg">${response[i].text}</p>
+//                                       </div>
+//                                        <div class="clearfix"></div>
+//                                  `;
+//                             }
+//                         }
+//                         // append the bot response on to the chat screen
+//                         $(botResponse).appendTo(".chats").hide().fadeIn(1000);
+//                     }
+//                 }
+
+//                 // check if the response contains "images"
+//                 if (Object.hasOwnProperty.call(response[i], "image")) {
+//                     if (response[i].image !== null) {
+//                         const BotResponse = `<div class="singleCard"><img class="imgcard" src="${response[i].image}"></div><div class="clearfix">`;
+
+//                         $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+//                     }
+//                 }
+
+//                 // check if the response contains "buttons"
+//                 if (Object.hasOwnProperty.call(response[i], "buttons")) {
+//                     if (response[i].buttons.length > 0) {
+//                         addSuggestion(response[i].buttons);
+//                     }
+//                 }
+
+//                 // check if the response contains "attachment"
+//                 if (Object.hasOwnProperty.call(response[i], "attachment")) {
+//                     if (response[i].attachment != null) {
+//                         if (response[i].attachment.type === "video") {
+//                             // check if the attachment type is "video"
+//                             const video_url = response[i].attachment.payload.src;
+
+//                             const BotResponse = `<div class="video-container"> <iframe src="${video_url}" frameborder="0" allowfullscreen></iframe> </div>`;
+//                             $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+//                         }
+//                     }
+//                 }
+//                 // check if the response contains "custom" message
+//                 if (Object.hasOwnProperty.call(response[i], "custom")) {
+//                     const {payload} = response[i].custom;
+//                     if (payload === "quickReplies") {
+//                         // check if the custom payload type is "quickReplies"
+//                         const quickRepliesData = response[i].custom.data;
+//                         showQuickReplies(quickRepliesData);
+//                         return;
+//                     }
+
+//                     // check if the custom payload type is "pdf_attachment"
+//                     if (payload === "pdf_attachment") {
+//                         renderPdfAttachment(response[i]);
+//                         return;
+//                     }
+
+//                     // check if the custom payload type is "dropDown"
+//                     if (payload === "dropDown") {
+//                         const dropDownData = response[i].custom.data;
+//                         renderDropDwon(dropDownData);
+//                         return;
+//                     }
+
+//                     // check if the custom payload type is "location"
+//                     if (payload === "location") {
+//                         $("#userInput").prop("disabled", true);
+//                         getLocation();
+//                         scrollToBottomOfResults();
+//                         return;
+//                     }
+
+//                     // check if the custom payload type is "cardsCarousel"
+//                     if (payload === "cardsCarousel") {
+//                         const restaurantsData = response[i].custom.data;
+//                         showCardsCarousel(restaurantsData);
+//                         return;
+//                     }
+
+//                     // check if the custom payload type is "chart"
+//                     if (payload === "chart") {
+//                         /**
+//                          * sample format of the charts data:
+//                          *  var chartData =  { "title": "Leaves", "labels": ["Sick Leave", "Casual Leave", "Earned Leave", "Flexi Leave"], "backgroundColor": ["#36a2eb", "#ffcd56", "#ff6384", "#009688", "#c45850"], "chartsData": [5, 10, 22, 3], "chartType": "pie", "displayLegend": "true" }
+//                          */
+
+//                         const chartData = response[i].custom.data;
+//                         const {
+//                             title,
+//                             labels,
+//                             backgroundColor,
+//                             chartsData,
+//                             chartType,
+//                             displayLegend,
+//                         } = chartData;
+
+//                         // pass the above variable to createChart function
+//                         createChart(
+//                             title,
+//                             labels,
+//                             backgroundColor,
+//                             chartsData,
+//                             chartType,
+//                             displayLegend
+//                         );
+
+//                         // on click of expand button, render the chart in the charts modal
+//                         $(document).on("click", "#expand", () => {
+//                             createChartinModal(
+//                                 title,
+//                                 labels,
+//                                 backgroundColor,
+//                                 chartsData,
+//                                 chartType,
+//                                 displayLegend
+//                             );
+//                         });
+//                         return;
+//                     }
+
+//                     // check of the custom payload type is "collapsible"
+//                     if (payload === "collapsible") {
+//                         const {data} = response[i].custom;
+//                         // pass the data variable to createCollapsible function
+//                         createCollapsible(data);
+//                     }
+//                 }
+//             }
+//             scrollToBottomOfResults();
+//         }
+//         $(".usrInput").focus();
+//     }, 500);
+// }
+
+// async function setBotResponse(response) {
+//     console.log("SetBotResponse:", response);
+
+//     // Create a delay using a Promise-based setTimeout
+//     await new Promise((resolve) => setTimeout(resolve, 500));
+
+//     hideBotTyping();
+
+//     if (response.length < 1) {
+//         const fallbackMsg = "I’m unable to find the information you’re looking for. \n" +
+//             "\n" + "<br/>" +
+//             "Please try asking in a different way or reach out to our support team for help. Is there anything else I can assist you with?";
+
+//         const BotResponse = `
+//             <div class="botAvatar">
+//                 <div class="botAvatar-image">
+//                     <img src="./static/img/disha.svg"/>
+//                 </div>
+//                 <p class="botMsg">${fallbackMsg}</p>
+//             </div>
+//             <div class="clearfix"></div>`;
+
+//         $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+//         scrollToBottomOfResults();
+//     } else {
+//         // If we get response from the bot
+//         for (let i = 0; i < response.length; i++) {
+//             if (Object.hasOwnProperty.call(response[i], "text") && response[i].text != null) {
+//                 let botResponse;
+//                 let html = converter.makeHtml(response[i].text);
+//                 html = html.replaceAll("<p>", "")
+//                            .replaceAll("</p>", "")
+//                            .replaceAll("<strong>", "<b>")
+//                            .replaceAll("</strong>", "</b>");
+//                 html = html.replace(/(?:\r\n|\r|\n)/g, "<br>");
+
+//                 // Handle different response cases like images, blockquotes, etc.
+//                 if (html.includes("<blockquote>")) {
+//                     html = html.replaceAll("<br>", "");
+//                     botResponse = getBotResponse(html);
+//                 } else if (html.includes("<img")) {
+//                     html = html.replaceAll("<img", '<img class="imgcard_mrkdwn" ');
+//                     botResponse = getBotResponse(html);
+//                 } else if (html.includes("<pre") || html.includes("<code>")) {
+//                     botResponse = getBotResponse(html);
+//                 } else if (html.includes("<ul") || html.includes("<ol") || html.includes("<li") || html.includes("<h3")) {
+//                     html = html.replaceAll("<br>", "");
+//                     botResponse = getBotResponse(html);
+//                 } else {
+//                     // Default response format if no markdown found
+//                     botResponse = `
+//                         <div class="botAvatar">
+//                             <div class="botAvatar-image">
+//                                 <img src="./static/img/disha.svg"/>
+//                             </div>
+//                             <p class="botMsg">${response[i].text}</p>
+//                         </div>
+//                         <div class="clearfix"></div>`;
+//                 }
+
+//                 // Append the bot response to the chat
+//                 $(botResponse).appendTo(".chats").hide().fadeIn(1000);
+//             }
+
+//             // Handle images
+//             if (Object.hasOwnProperty.call(response[i], "image") && response[i].image !== null) {
+//                 const BotResponse = `<div class="singleCard"><img class="imgcard" src="${response[i].image}"></div><div class="clearfix"></div>`;
+//                 $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+//             }
+
+//             // Handle buttons
+//             if (Object.hasOwnProperty.call(response[i], "buttons") && response[i].buttons.length > 0) {
+//                 addSuggestion(response[i].buttons);
+//             }
+
+//             // Handle attachments (e.g., videos)
+//             if (Object.hasOwnProperty.call(response[i], "attachment") && response[i].attachment !== null && response[i].attachment.type === "video") {
+//                 const video_url = response[i].attachment.payload.src;
+//                 const BotResponse = `<div class="video-container"><iframe src="${video_url}" frameborder="0" allowfullscreen></iframe></div>`;
+//                 $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+//             }
+
+//             // Handle custom messages (e.g., charts, quick replies)
+//             if (Object.hasOwnProperty.call(response[i], "custom")) {
+//                 const { payload } = response[i].custom;
+
+//                 if (payload === "quickReplies") {
+//                     const quickRepliesData = response[i].custom.data;
+//                     showQuickReplies(quickRepliesData);
+//                     return;
+//                 } else if (payload === "pdf_attachment") {
+//                     renderPdfAttachment(response[i]);
+//                     return;
+//                 } else if (payload === "dropDown") {
+//                     const dropDownData = response[i].custom.data;
+//                     renderDropDwon(dropDownData);
+//                     return;
+//                 } else if (payload === "location") {
+//                     $("#userInput").prop("disabled", true);
+//                     getLocation();
+//                     scrollToBottomOfResults();
+//                     return;
+//                 } else if (payload === "cardsCarousel") {
+//                     const restaurantsData = response[i].custom.data;
+//                     showCardsCarousel(restaurantsData);
+//                     return;
+//                 } else if (payload === "chart") {
+//                     const chartData = response[i].custom.data;
+//                     createChart(chartData.title, chartData.labels, chartData.backgroundColor, chartData.chartsData, chartData.chartType, chartData.displayLegend);
+//                     return;
+//                 } else if (payload === "collapsible") {
+//                     const data = response[i].custom.data;
+//                     createCollapsible(data);
+//                 }
+//             }
+//         }
+
+//         scrollToBottomOfResults();
+//     }
+
+//     $(".usrInput").focus();
+// }
+
 function setBotResponse(response) {
     console.log("SetBotResponse:", response);
-    // response - {
-    //     "recipient_id": "05eef2ff-3492-44c0-9fbe-c9fdf212070e",
-    //     "text": "(১) ভোটার এলাকা পরিবর্তন, (২) স্থায়ী ঠিকানা পরিবর্তন, (৩) বায়োমেট্রিক (ছবি, স্বাক্ষর, চোখের কণিনিকার প্রতিচ্ছবি, আঙ্গুলের ছাপ) পরিবর্তন এর আবেদন অনলাইন মাধ্যমে করা যায় না।"
-    // }
 
-    // renders bot response after 500 milliseconds
-    setTimeout(() => {
-        hideBotTyping();
-        if (response.length < 1) {
-            const fallbackMsg = "I’m unable to find the information you’re looking for. \n" +
-                "\n" + "<br/>" +
-                "Please try asking in a different way or reach out to our support team for help. Is there anything else I can assist you with?";
+    hideBotTyping();
 
-            const BotResponse = `
+    if (response.length < 1) {
+        const fallbackMsg = "I’m unable to find the information you’re looking for. \n" +
+            "\n" + "<br/>" +
+            "Please try asking in a different way or reach out to our support team for help. Is there anything else I can assist you with?";
 
- <div class="botAvatar">
-                                      <div class="botAvatar-image">
-                                         <img src="./static/img/disha.svg"/>
-                                       </div>
-                                       <p class="botMsg">${fallbackMsg}</p>
-                                      </div>
-                                       <div class="clearfix"></div>`;
+        const BotResponse = `
+            <div class="botAvatar">
+                <div class="botAvatar-image">
+                    <img src="./static/img/disha.svg"/>
+                </div>
+                <p class="botMsg">${fallbackMsg}</p>
+            </div>
+            <div class="clearfix"></div>`;
 
-            $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
-            scrollToBottomOfResults();
-        } else {
-            // if we get response from Rasa
-            for (let i = 0; i < response.length; i += 1) {
-                if (Object.hasOwnProperty.call(response[i], "text")) {
-                    // console.log(response[i].text);
-                    // response[i] = response[i].text
-                    if (response[i].text != null) {
-                        // console.log(response[i].text.text);
-                        // console.log("11111111111111");
-                        // convert the text to mardown format using showdown.js(https://github.com/showdownjs/showdown);
-                        let botResponse;
-                        let html = converter.makeHtml(response[i].text);
-                        html = html
-                            .replaceAll("<p>", "")
-                            .replaceAll("</p>", "")
-                            .replaceAll("<strong>", "<b>")
-                            .replaceAll("</strong>", "</b>");
-                        html = html.replace(/(?:\r\n|\r|\n)/g, "<br>");
-                        console.log(html);
-                        // check for blockquotes
-                        if (html.includes("<blockquote>")) {
-                            html = html.replaceAll("<br>", "");
-                            botResponse = getBotResponse(html);
-                        }
-                        // check for image
-                        if (html.includes("<img")) {
-                            html = html.replaceAll("<img", '<img class="imgcard_mrkdwn" ');
-                            botResponse = getBotResponse(html);
-                        }
-                        // check for preformatted text
-                        if (html.includes("<pre") || html.includes("<code>")) {
-                            botResponse = getBotResponse(html);
-                        }
-                        // check for list text
-                        if (
-                            html.includes("<ul") ||
-                            html.includes("<ol") ||
-                            html.includes("<li") ||
-                            html.includes("<h3")
-                        ) {
-                            html = html.replaceAll("<br>", "");
-                            // botResponse = `<img class="botAvatar" src="./static/img/sara_avatar.png"/><span class="botMsg">${html}</span><div class="clearfix"></div>`;
-                            botResponse = getBotResponse(html);
-                        } else {
-                            // if no markdown formatting found, render the text as it is.
-                            if (!botResponse) {
-                                botResponse = `
-                                      <div class="botAvatar">
-                                      <div class="botAvatar-image">
-                                         <img src="./static/img/disha.svg"/>
-                                       </div>
-                                       <p class="botMsg">${response[i].text}</p>
-                                      </div>
-                                       <div class="clearfix"></div>
-                                 `;
-                            }
-                        }
-                        // append the bot response on to the chat screen
-                        $(botResponse).appendTo(".chats").hide().fadeIn(1000);
-                    }
+        $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+        scrollToBottomOfResults();
+    } else {
+        // If we get response from the bot
+        for (let i = 0; i < response.length; i++) {
+            if (Object.hasOwnProperty.call(response[i], "text") && response[i].text != null) {
+                let botResponse;
+                let html = converter.makeHtml(response[i].text);
+                html = html.replaceAll("<p>", "")
+                           .replaceAll("</p>", "")
+                           .replaceAll("<strong>", "<b>")
+                           .replaceAll("</strong>", "</b>");
+                html = html.replace(/(?:\r\n|\r|\n)/g, "<br>");
+
+                // Handle different response cases like images, blockquotes, etc.
+                if (html.includes("<blockquote>")) {
+                    html = html.replaceAll("<br>", "");
+                    botResponse = getBotResponse(html);
+                } else if (html.includes("<img")) {
+                    html = html.replaceAll("<img", '<img class="imgcard_mrkdwn" ');
+                    botResponse = getBotResponse(html);
+                } else if (html.includes("<pre") || html.includes("<code>")) {
+                    botResponse = getBotResponse(html);
+                } else if (html.includes("<ul") || html.includes("<ol") || html.includes("<li") || html.includes("<h3")) {
+                    html = html.replaceAll("<br>", "");
+                    botResponse = getBotResponse(html);
+                } else {
+                    // Default response format if no markdown found
+                    botResponse = `
+                        <div class="botAvatar">
+                            <div class="botAvatar-image">
+                                <img src="./static/img/disha.svg"/>
+                            </div>
+                            <p class="botMsg">${response[i].text}</p>
+                        </div>
+                        <div class="clearfix"></div>`;
                 }
 
-                // check if the response contains "images"
-                if (Object.hasOwnProperty.call(response[i], "image")) {
-                    if (response[i].image !== null) {
-                        const BotResponse = `<div class="singleCard"><img class="imgcard" src="${response[i].image}"></div><div class="clearfix">`;
+                // Append the bot response to the chat
+                $(botResponse).appendTo(".chats").hide().fadeIn(1000);
+            }
 
-                        $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
-                    }
-                }
+            // Handle images
+            if (Object.hasOwnProperty.call(response[i], "image") && response[i].image !== null) {
+                const BotResponse = `<div class="singleCard"><img class="imgcard" src="${response[i].image}"></div><div class="clearfix"></div>`;
+                $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+            }
 
-                // check if the response contains "buttons"
-                if (Object.hasOwnProperty.call(response[i], "buttons")) {
-                    if (response[i].buttons.length > 0) {
-                        addSuggestion(response[i].buttons);
-                    }
-                }
+            // Handle buttons
+            if (Object.hasOwnProperty.call(response[i], "buttons") && response[i].buttons.length > 0) {
+                addSuggestion(response[i].buttons);
+            }
 
-                // check if the response contains "attachment"
-                if (Object.hasOwnProperty.call(response[i], "attachment")) {
-                    if (response[i].attachment != null) {
-                        if (response[i].attachment.type === "video") {
-                            // check if the attachment type is "video"
-                            const video_url = response[i].attachment.payload.src;
+            // Handle attachments (e.g., videos)
+            if (Object.hasOwnProperty.call(response[i], "attachment") && response[i].attachment !== null && response[i].attachment.type === "video") {
+                const video_url = response[i].attachment.payload.src;
+                const BotResponse = `<div class="video-container"><iframe src="${video_url}" frameborder="0" allowfullscreen></iframe></div>`;
+                $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+            }
 
-                            const BotResponse = `<div class="video-container"> <iframe src="${video_url}" frameborder="0" allowfullscreen></iframe> </div>`;
-                            $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
-                        }
-                    }
-                }
-                // check if the response contains "custom" message
-                if (Object.hasOwnProperty.call(response[i], "custom")) {
-                    const {payload} = response[i].custom;
-                    if (payload === "quickReplies") {
-                        // check if the custom payload type is "quickReplies"
-                        const quickRepliesData = response[i].custom.data;
-                        showQuickReplies(quickRepliesData);
-                        return;
-                    }
+            // Handle custom messages (e.g., charts, quick replies)
+            if (Object.hasOwnProperty.call(response[i], "custom")) {
+                const { payload } = response[i].custom;
 
-                    // check if the custom payload type is "pdf_attachment"
-                    if (payload === "pdf_attachment") {
-                        renderPdfAttachment(response[i]);
-                        return;
-                    }
-
-                    // check if the custom payload type is "dropDown"
-                    if (payload === "dropDown") {
-                        const dropDownData = response[i].custom.data;
-                        renderDropDwon(dropDownData);
-                        return;
-                    }
-
-                    // check if the custom payload type is "location"
-                    if (payload === "location") {
-                        $("#userInput").prop("disabled", true);
-                        getLocation();
-                        scrollToBottomOfResults();
-                        return;
-                    }
-
-                    // check if the custom payload type is "cardsCarousel"
-                    if (payload === "cardsCarousel") {
-                        const restaurantsData = response[i].custom.data;
-                        showCardsCarousel(restaurantsData);
-                        return;
-                    }
-
-                    // check if the custom payload type is "chart"
-                    if (payload === "chart") {
-                        /**
-                         * sample format of the charts data:
-                         *  var chartData =  { "title": "Leaves", "labels": ["Sick Leave", "Casual Leave", "Earned Leave", "Flexi Leave"], "backgroundColor": ["#36a2eb", "#ffcd56", "#ff6384", "#009688", "#c45850"], "chartsData": [5, 10, 22, 3], "chartType": "pie", "displayLegend": "true" }
-                         */
-
-                        const chartData = response[i].custom.data;
-                        const {
-                            title,
-                            labels,
-                            backgroundColor,
-                            chartsData,
-                            chartType,
-                            displayLegend,
-                        } = chartData;
-
-                        // pass the above variable to createChart function
-                        createChart(
-                            title,
-                            labels,
-                            backgroundColor,
-                            chartsData,
-                            chartType,
-                            displayLegend
-                        );
-
-                        // on click of expand button, render the chart in the charts modal
-                        $(document).on("click", "#expand", () => {
-                            createChartinModal(
-                                title,
-                                labels,
-                                backgroundColor,
-                                chartsData,
-                                chartType,
-                                displayLegend
-                            );
-                        });
-                        return;
-                    }
-
-                    // check of the custom payload type is "collapsible"
-                    if (payload === "collapsible") {
-                        const {data} = response[i].custom;
-                        // pass the data variable to createCollapsible function
-                        createCollapsible(data);
-                    }
+                if (payload === "quickReplies") {
+                    const quickRepliesData = response[i].custom.data;
+                    showQuickReplies(quickRepliesData);
+                    return;
+                } else if (payload === "pdf_attachment") {
+                    renderPdfAttachment(response[i]);
+                    return;
+                } else if (payload === "dropDown") {
+                    const dropDownData = response[i].custom.data;
+                    renderDropDwon(dropDownData);
+                    return;
+                } else if (payload === "location") {
+                    $("#userInput").prop("disabled", true);
+                    getLocation();
+                    scrollToBottomOfResults();
+                    return;
+                } else if (payload === "cardsCarousel") {
+                    const restaurantsData = response[i].custom.data;
+                    showCardsCarousel(restaurantsData);
+                    return;
+                } else if (payload === "chart") {
+                    const chartData = response[i].custom.data;
+                    createChart(chartData.title, chartData.labels, chartData.backgroundColor, chartData.chartsData, chartData.chartType, chartData.displayLegend);
+                    return;
+                } else if (payload === "collapsible") {
+                    const data = response[i].custom.data;
+                    createCollapsible(data);
                 }
             }
-            scrollToBottomOfResults();
         }
-        $(".usrInput").focus();
-    }, 500);
+
+        scrollToBottomOfResults();
+    }
+
+    $(".usrInput").focus();
 }
+
+
 
 /**
  * sends the user message to the rasa server,

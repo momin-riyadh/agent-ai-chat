@@ -1,0 +1,33 @@
+[
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/our_services",
+                        "title": "Explore our products and solutions"
+                    },
+                    {
+                        "payload": "/demo",
+                        "title": "I would like to see a demo"
+                    },
+                    {
+                        "payload": "/solution",
+                        "title": "Help me with a solution for my business"
+                    },
+                    {
+                        "payload": "/about_us",
+                        "title": "About Us"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "5bf36854-9087-48a0-9cc9-25fc4f70ad79",
+                "text": "Hi there, Welcome to gPlex AI! Nice to meet you. I'd love to help you out: What would you like to know? Choose one of the options below:"
+            }
+        ],
+        "client": "hi"
+    }
+]

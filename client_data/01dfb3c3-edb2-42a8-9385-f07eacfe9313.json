@@ -1,0 +1,104 @@
+[
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/our_services",
+                        "title": "Explore our products and solutions"
+                    },
+                    {
+                        "payload": "/demo",
+                        "title": "I would like to see a demo"
+                    },
+                    {
+                        "payload": "/solution",
+                        "title": "Help me with a solution for my business"
+                    },
+                    {
+                        "payload": "/about_us",
+                        "title": "About Us"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "01dfb3c3-edb2-42a8-9385-f07eacfe9313",
+                "text": "Hi there, Welcome to gPlex AI! Nice to meet you. I'd love to help you out: What would you like to know? Choose one of the options below:"
+            }
+        ],
+        "client": "hi"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/voice",
+                        "title": "Voice"
+                    },
+                    {
+                        "payload": "/messaging",
+                        "title": "Messaging"
+                    },
+                    {
+                        "payload": "/contact_center",
+                        "title": "Contact Center"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "01dfb3c3-edb2-42a8-9385-f07eacfe9313",
+                "text": "Awesome, we have a wide suite of products to help you step up your customer service and stand out! What kind of services are you looking for?"
+            }
+        ],
+        "client": "/our_services"
+    },
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/speech_to_text",
+                        "title": "Speech To Text"
+                    },
+                    {
+                        "payload": "/text_to_speech",
+                        "title": "Text To Speech"
+                    },
+                    {
+                        "payload": "/voice_assistant",
+                        "title": "Voice Assistant"
+                    },
+                    {
+                        "payload": "/greet",
+                        "title": "Main Menu"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "01dfb3c3-edb2-42a8-9385-f07eacfe9313",
+                "text": "Which services are you interested to know more about?"
+            }
+        ],
+        "client": "/voice"
+    },
+    {
+        "bot": [
+            {
+                "recipient_id": "01dfb3c3-edb2-42a8-9385-f07eacfe9313",
+                "text": "Due to internet issue I am unable to response. Please try again with different question"
+            }
+        ],
+        "client": "/voice_assistant"
+    }
+]

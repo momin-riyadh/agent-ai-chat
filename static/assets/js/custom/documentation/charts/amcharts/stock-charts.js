@@ -19,7 +19,7 @@ var KTGeneralAmChartsMaps = function () {
             chart.padding(0, 15, 0, 15);
 
             // Load external data
-            chart.dataSource.url = "https://www.amcharts.com/wp-content/uploads/assets/stock/MSFT.csv";
+            chart.dataSource.url = "https://www.amcharts.com/wp-content/uploads/static/assets/stock/MSFT.csv";
             chart.dataSource.parser = new am4core.CSVParser();
             chart.dataSource.parser.options.useColumnNames = true;
             chart.dataSource.parser.options.reverse = true;
