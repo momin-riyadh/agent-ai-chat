@@ -206,4 +206,4 @@ def clientAgentStatus(data):
         json.dump(existing_data, file, indent=4)
 
 if __name__ == "__main__":
-    socketio.run(app, host="192.168.10.92", port=6025, debug=True)
+    socketio.run(app, host="192.168.10.84", port=6025, debug=True)
