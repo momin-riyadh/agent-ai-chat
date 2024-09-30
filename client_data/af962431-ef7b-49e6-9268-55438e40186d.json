@@ -1,0 +1,42 @@
+[
+    {
+        "bot": [
+            {
+                "buttons": [
+                    {
+                        "payload": "/our_services",
+                        "title": "Explore our products and solutions"
+                    },
+                    {
+                        "payload": "/demo",
+                        "title": "I would like to see a demo"
+                    },
+                    {
+                        "payload": "/solution",
+                        "title": "Help me with a solution for my business"
+                    },
+                    {
+                        "payload": "/about_us",
+                        "title": "About Us"
+                    },
+                    {
+                        "payload": "/exit",
+                        "title": "Exit"
+                    }
+                ],
+                "recipient_id": "af962431-ef7b-49e6-9268-55438e40186d",
+                "text": "Hi there, Welcome to gPlex AI! Nice to meet you. I'd love to help you out: What would you like to know? Choose one of the options below:"
+            }
+        ],
+        "client": "hi"
+    },
+    {
+        "bot": [
+            {
+                "recipient_id": "af962431-ef7b-49e6-9268-55438e40186d",
+                "text": "Due to internet issue I am unable to response. Please try again with different question"
+            }
+        ],
+        "client": "asdfasdf"
+    }
+]

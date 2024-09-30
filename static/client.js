@@ -8,7 +8,7 @@ var stopper_cnt = 0
 // stop_btn = document.getElementById('stop');
 // statusField = document.getElementById('status');
 const microphoneIcon = document.getElementById("sendButton");
-const userInput = document.getElementById("userInput");
+// const userInput = document.getElementById("userInput");
 const paperplaneIcon = document.getElementById("sendButton");
 
 var micrIcon = document.getElementById('fa-microphone');
@@ -18,23 +18,6 @@ var loader = document.querySelector('.g-loader');
 
 var mic_toggle = 0
 
-userInput.addEventListener("input", function() {
-    if (userInput.value.trim() === "") {
-        microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-microphone" aria-hidden="true" style="display: block;"></i>';
-        mic_toggle = 0
-    } else {
-        microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-paper-plane" aria-hidden="true" style="display: block;"></i>';
-        mic_toggle = 2
-    }
-});
-
-userInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        // Reset the microphone icon to active mode
-        microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-microphone" aria-hidden="true" style="display: block;"></i>';
-        mic_toggle = 1
-    }
-});
 
 function generateUUID() { // Public Domain/MIT
     var d = new Date().getTime();//Timestamp
