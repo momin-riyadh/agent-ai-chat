@@ -9,9 +9,13 @@ registered_user = {}
 all_rooms = {}
 agentReplied = {}
 
-@app.route('/')
-def index():
+@app.route('/dashboard')
+def dashboard():
    return render_template("index.html")
+
+@app.route('/')
+def signin():
+   return render_template("sign-in.html")
 
 @app.route('/chat')
 def chatPage():
@@ -21,17 +25,17 @@ def chatPage():
 def middleware():
     global registered_user
     global agentReplied
-    
+
     ai_url = "http://192.168.10.92:5001/webhooks/rest/webhook"
     print(request.method)
     data = request.json
     sender = data['sender']
     test_message = data['message']
-    
+
     if sender not in registered_user:
         registered_user[sender] = sender
         socketio.emit("chatAddClient", {"msg": test_message, "sender": sender, "new": True})
-    
+
     ss = str(sender)
     if sender not in agentReplied:
         message = {
@@ -43,10 +47,10 @@ def middleware():
         }
         data = json.dumps(message)
         response = requests.post(ai_url, headers=headers, data=data)
-        
+
         if ss not in all_rooms["room1"]:
             socketio.emit("addClient", {"userName": ss, "room": "room1"})
-        
+
         if response.status_code == 200:
             print("Response from Rasa:")
             rasa_response = response.json()
@@ -58,7 +62,7 @@ def middleware():
             print("*"*50)
             buttonVals = getButtonValues()
             socketio.emit("addNewMessage", {"msg": {"user": test_message, "bot": rasa_response}, "sender": sender, "new": True, "buttonValues": buttonVals})
-            
+
             if not os.path.exists('client_data'):
                 os.makedirs('client_data')
 
@@ -67,7 +71,7 @@ def middleware():
                 "client": test_message,
                 "bot": rasa_response
             }
-            
+
             if "buttons" in rasa_response[0]:
                 buttonsFile = f"buttonsFile.json"
                 if os.path.exists(buttonsFile):
@@ -82,8 +86,8 @@ def middleware():
                         buttonsData[rr["payload"]] = rr["title"]
                 with open(buttonsFile, 'w') as file:
                     json.dump(buttonsData, file, indent=4)
-            
-            
+
+
             file_path = f'client_data/{ss}.json'
             if os.path.exists(file_path):
                 with open(file_path, 'r') as file:
@@ -94,7 +98,7 @@ def middleware():
 
             with open(file_path, 'w') as file:
                 json.dump(existing_data, file, indent=4)
-            
+
             return response.json()
         else:
             print(f"Error: {response.status_code}")
@@ -115,7 +119,7 @@ def middleware():
 
         with open(file_path, 'w') as file:
             json.dump(existing_data, file, indent=4)
-        
+
     return ""
 
 @socketio.on('join_room')
@@ -123,10 +127,10 @@ def handle_message(data):
     global all_rooms
     userName = str(data['userName'])
     room = data['room']
-    
+
     if room not in all_rooms:
         all_rooms[room] = []
-    
+
     if userName not in all_rooms[room]:
         all_rooms[room].append(userName)
         join_room(room)
@@ -145,13 +149,13 @@ def getButtonValues():
     else:
         buttons_data = [{}]
     return buttons_data
-    
-    
+
+
 
 @app.route('/chat/<sender_id>', methods=["GET"])
 def get_chat(sender_id):
     chat_file_path = f'client_data/{sender_id}.json'
-    
+
 
     # Load chat history
     chat_history = []
@@ -192,4 +196,4 @@ def clientAgentStatus(data):
         json.dump(existing_data, file, indent=4)
 
 if __name__ == "__main__":
-    socketio.run(app, host="192.168.10.92", port=6025, debug=True)
+    socketio.run(app, host="192.168.10.84", port=6025, debug=True)
