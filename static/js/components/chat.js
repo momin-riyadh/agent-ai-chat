@@ -4,29 +4,42 @@
 const converter = new showdown.Converter();
 var audio1 = "nn";
 
-let userInput_new = document.getElementById("userInput");
 
-userInput_new.addEventListener("input", function() {
-    if (userInput_new.value.trim() === "") {
+document.getElementById("userInput").addEventListener("input", function() {
+    if (document.getElementById("userInput").value.trim() === "") {
         microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-microphone" aria-hidden="true" style="display: block;"></i>';
         mic_toggle = 0
     } else {
-        console.log(userInput_new.value);
+        // console.log(document.getElementById("userInput").value);
         microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-paper-plane" aria-hidden="true" style="display: block;"></i>';
         mic_toggle = 2
     }
-});
-
-userInput_new.addEventListener("keydown", function(event) {
+  });
+  
+  document.getElementById("userInput").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         // Reset the microphone icon to active mode
         event.preventDefault();
         microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-microphone" aria-hidden="true" style="display: block;"></i>';
         mic_toggle = 1
-        send(userInput_new.value);
+        // send(userInput_new.value);
+
+        currentSock = io.connect("http://192.168.10.92:5025");
+        const replyInput = document.getElementById("userInput").value;
+        setBotResponse([{"test_message": currentSender, "text":replyInput}]);
+        if (replyInput && currentSender) {
+            currentSock.emit("recieveAgentMessage", {
+                "sender": currentSender, 
+                "reply": replyInput
+            });
+        }
+  
+        socket.emit("clientAgentStatus", {"sender": currentSender, "msg": replyInput});
         
+        document.getElementById('userInput').value = "";
     }
-});
+  });
+
 
 
 function scrollToBottomOfResults() {

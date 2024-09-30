@@ -101,6 +101,7 @@ def middleware():
             print(response.text)
     else:
         # Prepare the data to be saved
+        socketio.emit("addNewMessage", {"msg": {"user": test_message, "bot": ""}, "sender": sender, "new": True, "buttonValues": [{}]})
         client_data = {
             "client": test_message
         }
@@ -134,20 +135,6 @@ def handle_message(data):
     else:
         print(f"{userName} is already in {room}")
 
-
-# @app.route('/chat/<sender_id>', methods=["GET"])
-# def get_chat(sender_id):
-#     file_path = f'client_data/{sender_id}.json'
-    
-#     if os.path.exists(file_path):
-#         # Open and return the chat history if it exists
-#         with open(file_path, 'r') as file:
-#             chat_history = json.load(file)
-#         # print(chat_history)
-#         return jsonify(chat_history)
-#     else:
-#         # Return an empty list if no chat history exists for the sender
-#         return jsonify([])
 
 def getButtonValues():
     buttons_file_path = 'buttonsFile.json'
