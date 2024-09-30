@@ -100,6 +100,8 @@ socket.on("addClient", function(data){
     socket.emit("join_room", data);
 });
 
+// socket.on("")
+
 socket.on("chatAddClient", function(data) {
   const clientList = document.getElementById('rukUsersList');
   clientList.innerHTML += `

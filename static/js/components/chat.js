@@ -4,7 +4,6 @@
 const converter = new showdown.Converter();
 var audio1 = "nn";
 
-
 document.getElementById("userInput").addEventListener("input", function() {
     if (document.getElementById("userInput").value.trim() === "") {
         microphoneIcon.innerHTML = '<i id="fa-microphone" class="fa fa-microphone" aria-hidden="true" style="display: block;"></i>';
