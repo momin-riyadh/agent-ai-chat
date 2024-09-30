@@ -97,40 +97,6 @@ let previousSelectedSender = null;
 let noBotRukAgent = {};
 
 socket.on("addClient", function(data){
-  //   const clientList = document.getElementById('rukUsersList');
-  //   clientList.innerHTML += `
-  //     <div class="d-flex flex-stack py-4">
-  //         <!--begin::Details-->
-  //         <div class="d-flex align-items-center">
-  //             <!--begin::Avatar-->
-  //             <div class="symbol symbol-45px symbol-circle">
-  //                 <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">E</span>
-  //                 <div class="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"></div>
-  //             </div>
-  //             <!--end::Avatar-->
-  //             <!--begin::Details-->
-  //             <div class="ms-5">
-  //                 <a href="javascript:void(0)" onclick="loadChat('${data['userName']}'); event.preventDefault();" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">${data['userName']}</a>
-  //                 <div class="fw-bold text-muted">rukon@intenso.com</div>
-  //             </div>
-  //             <!--end::Details-->
-  //         </div>
-  //         <!--end::Details-->
-  //         <!--begin::Last seen-->
-  //         <div class="d-flex flex-column align-items-end ms-2">
-  //             <span class="text-muted fs-7 mb-1">5 hrs</span>
-  //             <span class="badge badge-sm badge-circle badge-light-danger">5</span>
-  //         </div>
-  //         <!--end::Last seen-->
-  //     </div>
-  // `;
-    // clientList.innerHTML += `
-    //     <label class="client-item new-message" data-sender="${data['userName']}">
-    //         <input type="radio" name="client" class="client-radio" value="${data['userName']}">
-    //         ${data['userName']}
-    //     </label>`;
-
-
     socket.emit("join_room", data);
 });
 
@@ -162,16 +128,6 @@ socket.on("chatAddClient", function(data) {
           <!--end::Last seen-->
       </div>
   `;
-    // if (currentSender == data["sender"]) {
-    //     const chatDisplay = document.getElementById('chat-display');
-    //     chatDisplay.innerHTML += `<p><strong>Client:</strong> ${data['msg']}</p><hr>`;
-    // } else {
-    //     // Highlight the client ID in red if it's not the current sender
-    //     const clientElement = document.querySelector(`[data-sender="${data['sender']}"]`);
-    //     if (clientElement && data.new) {
-    //         clientElement.classList.add('new-message');
-    //     }
-    // }
 });
 
 socket.on("addNewMessage", function(data){
@@ -183,8 +139,9 @@ socket.on("addNewMessage", function(data){
     }else{
       setUserResponse(data.msg["user"]);
     }
-
-    setBotResponse(data.msg["bot"]);
+    if(data.msg["bot"] != ""){
+      setBotResponse(data.msg["bot"]);
+    }
   }
 
 })
@@ -259,25 +216,3 @@ document.addEventListener('change', function(event) {
     }
 });
 
-
-// Handle sending the reply
-document.getElementById('send-reply').addEventListener('click', function() {
-
-    currentSock = io.connect("http://192.168.10.92:5025");
-    const replyInput = document.getElementById('reply-input').value;
-    noBotRukAgent[currentSender] = 1;
-
-    socket.emit("clientAgentStatus", {"sender": currentSender, "msg": replyInput});
-
-    const chatDisplay = document.getElementById('chat-display');
-    chatDisplay.innerHTML += `<p><strong>Agent:</strong> ${replyInput}</p><hr>`
-    
-    // console.log(userSID)
-    if (replyInput && currentSender) {
-        currentSock.emit("recieveAgentMessage", {
-            "sender": currentSender, 
-            "reply": replyInput
-        });
-    }
-    document.getElementById('reply-input').value = "";
-});
