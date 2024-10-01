@@ -201,6 +201,7 @@ function loadChat(sender) {
 
 
           chatHistory.forEach(chat => {
+              console.log(chat);
               if (chat.client) {
                   // Check if there's a corresponding value in buttonsDict
                   if (buttonsDict[chat.client]) {
@@ -215,7 +216,9 @@ function loadChat(sender) {
                   setBotResponse(chat.bot);
               }
               if (chat.agent) {
-                  setBotResponse(chat.agent);
+                  // setBotResponse(chat.agent);
+                  setBotResponse([{"recipient_id": sender, "text": chat.agent}]);
+                  noBotruk = 1;
               }
           });
 

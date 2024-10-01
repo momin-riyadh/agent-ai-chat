@@ -3,6 +3,7 @@
  */
 const converter = new showdown.Converter();
 var audio1 = "nn";
+let noBotruk = 0;
 
 document.getElementById("userInput").addEventListener("input", function() {
     if (document.getElementById("userInput").value.trim() === "") {
@@ -26,6 +27,7 @@ document.getElementById("userInput").addEventListener("input", function() {
         currentSock = io.connect("http://192.168.10.92:5025");
         const replyInput = document.getElementById("userInput").value;
         setBotResponse([{"test_message": currentSender, "text":replyInput}]);
+        noBotruk = 1;
         if (replyInput && currentSender) {
             currentSock.emit("recieveAgentMessage", {
                 "sender": currentSender, 
@@ -64,7 +66,11 @@ async function setUserResponse(message) {
 
     $(".usrInput").val("");
     scrollToBottomOfResults();
-    showBotTyping();
+    if(noBotruk == 0){ 
+        showBotTyping();
+        // $(".suggestions").remove();
+    }
+    // showBotTyping();
     // $(".suggestions").remove();
 }
 
