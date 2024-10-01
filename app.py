@@ -6,6 +6,7 @@ import os
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*", ping_interval=2, ping_timeout=10)
 registered_user = {}
+# registered_user["b5a9e597-dadc-42d3-a3a9-174fcec83460"]="b5a9e597-dadc-42d3-a3a9-174fcec83460"
 all_rooms = {}
 agentReplied = {}
 
@@ -140,6 +141,14 @@ def handle_message(data):
         print(f"{userName} is already in {room}")
 
 
+@socketio.on('getClients')
+def getClients(data):
+    global registered_user
+    for k, v in registered_user.items():
+        socketio.emit("chatAddClient", {"msg": "", "sender": v, "new": True})
+    
+
+
 def getButtonValues():
     buttons_file_path = 'buttonsFile.json'
     buttons_data = {}
@@ -149,7 +158,6 @@ def getButtonValues():
     else:
         buttons_data = [{}]
     return buttons_data
-
 
 
 @app.route('/chat/<sender_id>', methods=["GET"])

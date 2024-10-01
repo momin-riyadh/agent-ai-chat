@@ -100,7 +100,42 @@ socket.on("addClient", function(data){
     socket.emit("join_room", data);
 });
 
-// socket.on("")
+socket.emit("getClients", {});
+
+socket.on("chatAddClient2", function(data) {
+  const clientList = document.getElementById('rukUsersList');
+  console.log("RRRRRRRRRRRR", data);
+  data.forEach(dd => {
+    clientList.innerHTML += `
+      <div class="d-flex flex-stack py-4">
+          <!--begin::Details-->
+          <div class="d-flex align-items-center">
+              <!--begin::Avatar-->
+              <div class="symbol symbol-45px symbol-circle">
+                  <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">E</span>
+                  <div class="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"></div>
+              </div>
+              <!--end::Avatar-->
+              <!--begin::Details-->
+              <div class="ms-5">
+                  <a href="javascript:void(0)" onclick="loadChat('${dd}'); event.preventDefault();" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">${dd}</a>
+                  <div class="fw-bold text-muted">rukon@intenso.com</div>
+              </div>
+              <!--end::Details-->
+          </div>
+          <!--end::Details-->
+          <!--begin::Last seen-->
+          <div class="d-flex flex-column align-items-end ms-2">
+              <span class="text-muted fs-7 mb-1">5 hrs</span>
+              <span class="badge badge-sm badge-circle badge-light-danger">5</span>
+          </div>
+          <!--end::Last seen-->
+      </div>
+  `;
+
+  })
+});
+
 
 socket.on("chatAddClient", function(data) {
   const clientList = document.getElementById('rukUsersList');
