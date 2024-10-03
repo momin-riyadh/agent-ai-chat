@@ -73,6 +73,7 @@ def signin():
                 return redirect(url_for('dashboard'))
     return render_template("sign-in.html")
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -216,7 +217,9 @@ def getClients(data):
     # global registered_user
     global all_rooms
     for v in all_rooms[roomName]:
-        socketio.emit("chatAddClient", {"sender": v, "new": True})
+        if "agent" in v:
+            continue
+        socketio.emit("chatAddClient", {"sender": v, "new": True, "room": roomName})
 
 
 def getButtonValues():

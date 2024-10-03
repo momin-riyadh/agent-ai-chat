@@ -156,12 +156,20 @@ socket.on("addNewMessage", function(data){
 })
 
 
-// Function to load chat data and display reply section
+function _(x){
+  return document.getElementById(x);
+}
+
+
 function loadChat(sender) {
-  const chatsDiv = document.getElementById('chats');
+  const chatsDiv = _('chats');
   while (chatsDiv.firstChild) {
       chatsDiv.removeChild(chatsDiv.firstChild);  // Removes all existing chat elements
   }
+  const clientName = _("rukClientName");
+  const onlineBadge = _("rukOnlineBadge");
+  onlineBadge.style.display = 'block';
+  clientName.innerHTML = sender;
 
   fetch(`/chat/${sender}`)
       .then(response => response.json())
@@ -170,8 +178,6 @@ function loadChat(sender) {
           const buttonsData = data.buttons_data;  // Access buttons data
           // console.log(buttonsData);
           let buttonsDict = buttonsData;
-
-
           chatHistory.forEach(chat => {
               console.log(chat);
               if (chat.client) {
