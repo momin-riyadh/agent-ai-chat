@@ -73,6 +73,13 @@ def signin():
                 return redirect(url_for('dashboard'))
     return render_template("sign-in.html")
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()  # Logs the user out
+    return redirect(url_for('signin'))  # Redirect to sign-in page after logout
+
+
 @app.route('/chat')
 @login_required
 def chatPage():
@@ -267,4 +274,4 @@ def clientAgentStatus(data):
         json.dump(existing_data, file, indent=4)
 
 if __name__ == "__main__":
-    socketio.run(app, host="192.168.10.84", port=6025, debug=True)
+    socketio.run(app, host="192.168.10.92", port=6025, debug=True)
