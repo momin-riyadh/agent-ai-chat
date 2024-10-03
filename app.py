@@ -1,26 +1,84 @@
-from flask import Flask, render_template, request, json, jsonify
+from flask import Flask, render_template, request, json, jsonify, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room
 import requests
 import os
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
+
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 socketio = SocketIO(app, cors_allowed_origins="*", ping_interval=2, ping_timeout=10)
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'signin'
+
+agent_room_dict = {
+    "agent1@gmail.com": "room1",
+    "agent2@gmail.com": "room2",
+    "agent3@gmail.com": "room3",
+}
+
 registered_user = {}
 # registered_user["b5a9e597-dadc-42d3-a3a9-174fcec83460"]="b5a9e597-dadc-42d3-a3a9-174fcec83460"
 all_rooms = {}
 agentReplied = {}
 
-@app.route('/dashboard')
-def dashboard():
-   return render_template("index.html")
+def roomManager():
+    global all_rooms
+    roomCapacity = 5
+    if len(all_rooms["room1"]) < roomCapacity:
+        return "room1"
+    if len(all_rooms["room2"]) < roomCapacity:
+        return "room2"
+    if len(all_rooms["room3"]) < roomCapacity:
+        return "room3"
+        
+class User(UserMixin):
+    def __init__(self, id, room_name):
+        self.id = id
+        self.room_name = room_name  # Add room_name to track the user's room
 
-@app.route('/')
+    # This is required by Flask-Login to identify the user
+    def get_id(self):
+        return self.id
+
+    def get_room(self):
+        return self.room_name
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    room_name = agent_room_dict.get(user_id, "room1")
+    return User(user_id, room_name)
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    agentName = current_user.get_id()
+    currentRoom = current_user.get_room()
+    return render_template("index.html", agentName = agentName, currentRoom = currentRoom)
+
+@app.route('/', methods=['GET', 'POST'])
 def signin():
-   return render_template("sign-in.html")
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        print(f"Email: {email}")
+        print(f"Password: {password}")
+        
+        if email in agent_room_dict:
+            if password == "agent123":
+                user = User(email, password)
+                login_user(user)
+                return redirect(url_for('dashboard'))
+    return render_template("sign-in.html")
 
 @app.route('/chat')
+@login_required
 def chatPage():
-   return render_template("chat.html")
+    currentID = current_user.get_id()
+    currentRoom = current_user.get_room()
+    return render_template("chat.html", currentID = currentID, currentRoom=currentRoom)
 
 @app.route('/middleware', methods=["GET", "POST"])
 def middleware():
@@ -32,11 +90,7 @@ def middleware():
     data = request.json
     sender = data['sender']
     test_message = data['message']
-
-    if sender not in registered_user:
-        registered_user[sender] = sender
-        socketio.emit("chatAddClient", {"msg": test_message, "sender": sender, "new": True})
-
+    
     ss = str(sender)
     if sender not in agentReplied:
         message = {
@@ -49,8 +103,14 @@ def middleware():
         data = json.dumps(message)
         response = requests.post(ai_url, headers=headers, data=data)
 
-        if ss not in all_rooms["room1"]:
-            socketio.emit("addClient", {"userName": ss, "room": "room1"})
+        roomNumber = roomManager()
+        
+        if sender not in registered_user:
+            registered_user[sender] = sender
+            socketio.emit("chatAddClient", {"sender": sender, "new": True, "room": roomNumber})
+        
+        if ss not in all_rooms["room1"] and ss not in all_rooms["room2"] and ss not in all_rooms["room3"]:
+            socketio.emit("addClient", {"userName": ss, "room": roomNumber})
 
         if response.status_code == 200:
             print("Response from Rasa:")
@@ -142,12 +202,14 @@ def handle_message(data):
 
 
 @socketio.on('getClients')
+@login_required
 def getClients(data):
-    global registered_user
-    for k, v in registered_user.items():
-        socketio.emit("chatAddClient", {"msg": "", "sender": v, "new": True})
-    
-
+    # userID = current_user.get_id()
+    roomName = current_user.get_room()
+    # global registered_user
+    global all_rooms
+    for v in all_rooms[roomName]:
+        socketio.emit("chatAddClient", {"sender": v, "new": True})
 
 def getButtonValues():
     buttons_file_path = 'buttonsFile.json'
@@ -161,10 +223,9 @@ def getButtonValues():
 
 
 @app.route('/chat/<sender_id>', methods=["GET"])
+@login_required
 def get_chat(sender_id):
     chat_file_path = f'client_data/{sender_id}.json'
-
-
     # Load chat history
     chat_history = []
     if os.path.exists(chat_file_path):
@@ -186,6 +247,7 @@ def get_chat(sender_id):
 
 
 @socketio.on('clientAgentStatus')
+@login_required
 def clientAgentStatus(data):
     global agentReplied
     agentReplied[data["sender"]] = 1
