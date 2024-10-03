@@ -102,44 +102,13 @@ socket.on("addClient", function(data){
 
 socket.emit("getClients", {});
 
-socket.on("chatAddClient2", function(data) {
-  const clientList = document.getElementById('rukUsersList');
-  console.log("RRRRRRRRRRRR", data);
-  data.forEach(dd => {
-    clientList.innerHTML += `
-      <div class="d-flex flex-stack py-4">
-          <!--begin::Details-->
-          <div class="d-flex align-items-center">
-              <!--begin::Avatar-->
-              <div class="symbol symbol-45px symbol-circle">
-                  <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">E</span>
-                  <div class="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"></div>
-              </div>
-              <!--end::Avatar-->
-              <!--begin::Details-->
-              <div class="ms-5">
-                  <a href="javascript:void(0)" onclick="loadChat('${dd}'); event.preventDefault();" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">${dd}</a>
-                  <div class="fw-bold text-muted">rukon@intenso.com</div>
-              </div>
-              <!--end::Details-->
-          </div>
-          <!--end::Details-->
-          <!--begin::Last seen-->
-          <div class="d-flex flex-column align-items-end ms-2">
-              <span class="text-muted fs-7 mb-1">5 hrs</span>
-              <span class="badge badge-sm badge-circle badge-light-danger">5</span>
-          </div>
-          <!--end::Last seen-->
-      </div>
-  `;
-
-  })
-});
-
 
 socket.on("chatAddClient", function(data) {
   const clientList = document.getElementById('rukUsersList');
-  clientList.innerHTML += `
+  const agentRoom = document.getElementById('rukAgentRoom').innerText;
+  clientRoom = data.room
+  if(agentRoom.trim() == clientRoom.trim()){
+      clientList.innerHTML += `
       <div class="d-flex flex-stack py-4">
           <!--begin::Details-->
           <div class="d-flex align-items-center">
@@ -165,6 +134,9 @@ socket.on("chatAddClient", function(data) {
           <!--end::Last seen-->
       </div>
   `;
+
+  }
+  
 });
 
 socket.on("addNewMessage", function(data){
@@ -229,30 +201,4 @@ function loadChat(sender) {
 }
 
 
-document.addEventListener('change', function(event) {
-    if (event.target.classList.contains('client-radio')) {
-        const selectedSender = event.target.value;
-
-        const clientItems = document.querySelectorAll('.client-item');
-        clientItems.forEach(item => {
-            // Always remove the 'selected' class from all items
-            item.classList.remove('selected');
-            
-            // Add 'selected' class only to the clicked/selected item
-            if (item.getAttribute('data-sender') === selectedSender) {
-                item.classList.add('selected');
-
-                // Check and remove 'new-message' class only for the selected item
-                if (item.classList.contains('new-message')) {
-                    item.classList.remove('new-message');
-                }
-            }
-        });
-
-        // Load the chat for the selected client
-        loadChat(selectedSender);
-
-        previousSelectedSender = selectedSender;
-    }
-});
 
