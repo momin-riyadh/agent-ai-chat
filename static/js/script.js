@@ -105,14 +105,9 @@ socket.emit("getClients", {});
 
 socket.on("chatAddClient", function(data) {
   const clientList = document.getElementById('rukUsersList');
-  // const agentEmail = document.getElementById('rukAgentID').innerText;
   const agentRoom = document.getElementById('rukAgentRoom').innerText;
-  // currentRoom = "{{ currentRoom }}";
   clientRoom = data.room
-  // console.log("rrrrrrrrrrrrrrr", agentRoom);
-  // console.log("rrrrrrrrrrrrrrr", clientRoom);
   if(agentRoom.trim() == clientRoom.trim()){
-    // console.log("1111111111111111")
       clientList.innerHTML += `
       <div class="d-flex flex-stack py-4">
           <!--begin::Details-->
