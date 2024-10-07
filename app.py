@@ -54,9 +54,9 @@ def load_user(user_id):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    agentName = current_user.get_id()
+    currentID = current_user.get_id()
     currentRoom = current_user.get_room()
-    return render_template("index.html", agentName = agentName, currentRoom = currentRoom)
+    return render_template("index.html", currentID = currentID, currentRoom=currentRoom)
 
 @app.route('/', methods=['GET', 'POST'])
 def signin():
